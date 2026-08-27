@@ -185,7 +185,7 @@ var PROMESSAS = [
     texto: 'Que cada EBF, cada louvor e cada trabalho na casa de Deus seja mais uma primeira vez de algo que a gente vai fazer pelo resto da vida.'
   },
   {
-    titulo: 'Prometo ser o seu descanso',
+    titulo: 'Prometo sempre estar aqui',
     texto: 'Sempre que precisar, eu tô aqui pra ser o seu travesseiro, o seu abraço e o seu lugar seguro.'
   },
   {
