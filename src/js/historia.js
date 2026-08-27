@@ -4,11 +4,12 @@
    ========================================================================= */
 
 /* -------------------------------------------------------------------------
-   >>>>>  TROQUE AQUI  <<<<<
-   Data e hora em que vocês começaram a namorar (formato: ANO-MÊS-DIA T HORA).
+   Data em que começamos a namorar: 2 de março de 2025.
    É a partir dela que o contador da página conta os dias juntos.
+   (Formato: ANO-MÊS-DIA T HORA. Está à meia-noite, então a contagem é em
+   dias de calendário; se quiser a hora exata do pedido, é só trocar.)
    ------------------------------------------------------------------------- */
-var DATA_DO_NAMORO = '2025-02-14T19:00:00';
+var DATA_DO_NAMORO = '2025-03-02T00:00:00';
 
 /* Nome que aparece no hero e nas assinaturas */
 var PESSOAS = {
