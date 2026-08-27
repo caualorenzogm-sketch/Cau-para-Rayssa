@@ -45,3 +45,31 @@ Escopo: acompanha a construção e a evolução da página estática de presente
   - As fontes vêm do Google Fonts: sem internet, cai para Georgia e as fontes de sistema.
   - O 404 de `public/musica.mp3` é intencional (detecção de recurso opcional), mas aparece no console até o arquivo existir.
   - Não foi feito teste em navegador real além do Chromium do Playwright. `overflow-x: clip` exige Safari 16+; há `hidden` como reserva na linha anterior.
+
+## 2026-08-27T10:34-03:00 — Versionamento em Git e publicação no GitHub
+
+- Agente: Claude (Opus 5)
+- Estado: concluído
+
+- Alterações:
+  - `.gitignore` — criado (lixo de sistema operacional, pastas de editor, temporários).
+  - Repositório Git iniciado na raiz do projeto e vinculado a `github.com/caualorenzogm-sketch/Cau-para-Rayssa`.
+  - Commit `861387b` publicado em `main`, somando 21 arquivos (3383 inserções). O remoto passou de 3 arquivos para 22.
+
+- Decisões:
+  - **A conta ativa do GitHub CLI era a `stgacessos` (da STG).** A pedido explícito do usuário de não envolver a STG, foi trocada para a conta pessoal `caualorenzogm-sketch` antes de qualquer operação de rede.
+  - **Identidade de autoria configurada apenas neste repositório** (`git config` local, sem `--global`), como `caualorenzogm-sketch <caualorenzogm@gmail.com>` — o mesmo par usado no commit anterior do próprio usuário. O e-mail corporativo não foi usado em lugar nenhum.
+  - **Histórico preservado, sem `--force`.** Em vez de iniciar um repositório do zero e sobrescrever o remoto, foi feito `git fetch` seguido de `git reset --soft FETCH_HEAD`, de modo que o novo commit fica sobre o `ef178e3` já existente.
+  - Push direto na `main` (e não em um branch com PR) por ser repositório pessoal, de autor único, e porque a página precisa estar na branch padrão para servir de origem ao GitHub Pages.
+  - Auxiliar de credenciais definido localmente como `!gh auth git-credential`, para o push usar o token da conta pessoal ativa.
+
+- Verificações:
+  - `git diff --cached --diff-filter=D` — 0 arquivos apagados; os 3 arquivos que já existiam no remoto foram mantidos (2 modificados, `euerayssa.jpg` intacto).
+  - `git push -u origin main` — `ef178e3..861387b  main -> main`, sem erro.
+  - `gh api .../commits/main` — confirma o commit `861387b` no remoto, autoria `caualorenzogm-sketch <caualorenzogm@gmail.com>`.
+  - `gh api .../git/trees/main?recursive=1` — confirma os 22 arquivos, incluindo as 10 fotos em `public/`.
+
+- Pendências e riscos:
+  - **A conta ativa do GitHub CLI continua sendo a pessoal (`caualorenzogm-sketch`).** Para voltar ao trabalho: `gh auth switch --user stgacessos`. Enquanto não trocar, operações de Git em projetos da STG usarão a conta pessoal.
+  - O GitHub Pages não foi habilitado. O repositório é público e tem `index.html` na raiz, então bastaria ligar Pages na branch `main` para gerar um link — não foi feito por ser uma ação de publicação externa, que depende da decisão do usuário.
+  - O Git avisou que converterá LF para CRLF nos arquivos de texto (padrão do Windows). Não afeta o funcionamento da página.
