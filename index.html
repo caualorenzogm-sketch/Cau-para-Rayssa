@@ -1,28 +1,338 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Você</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FFF8FA">
+  <meta name="description" content="Uma linha do tempo da nossa história — de Cauã para a Rayssa.">
+
+  <title>Para a minha boneca — Cauã & Rayssa</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Great+Vibes&family=Jost:wght@300;400;500&display=swap">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="src/css/components.css">
+  <link rel="stylesheet" href="src/css/sections.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23DB2777' d='M20.4 5.9a5.2 5.2 0 0 0-7.4 0L12 7l-1-1.1a5.2 5.2 0 0 0-7.4 7.4l.9.9L12 21.4l7.5-7.2.9-.9a5.2 5.2 0 0 0 0-7.4z'/%3E%3C/svg%3E">
 </head>
+
 <body>
-     <div class="carta">
-        <h1>Para o amoreco da minha vida ❤️</h1>
-        <img class="foto-casal" src="euerayssa.jpg" alt="Eu e ela">
-        <p>
-            Minha princesinha, a pessoinha que desde que entrou na minha vida, tem deixado ela muito mais divertida,
-            alegre e amorosa. Você tem o meu sorriso favorito desse mundo! Sempre vou te escolher todos os dias
 
-        </p>
+  <!-- =====================================================================
+       ABERTURA — o envelope
+       ===================================================================== -->
+  <div class="abertura" id="abertura">
+    <div class="abertura__conteudo">
+      <svg class="envelope" viewBox="0 0 300 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="grad-papel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFFDFB"/>
+            <stop offset="100%" stop-color="#FDE7F0"/>
+          </linearGradient>
+          <linearGradient id="grad-aba" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FBCFE0"/>
+            <stop offset="100%" stop-color="#F7A8C4"/>
+          </linearGradient>
+        </defs>
+        <rect x="14" y="34" width="272" height="152" rx="12" fill="url(#grad-papel)" stroke="#F0B7CE" stroke-width="1.5"/>
+        <path d="M14 46 150 132 286 46" fill="none" stroke="#F0B7CE" stroke-width="1.5"/>
+        <path d="M14 46q0-12 12-12h248q12 0 12 12L150 132z" fill="url(#grad-aba)"/>
+        <path d="M14 186 118 104M286 186 182 104" stroke="#F0B7CE" stroke-width="1.5" fill="none"/>
+        <circle cx="150" cy="118" r="27" fill="#BE185D" opacity=".95"/>
+        <circle cx="150" cy="118" r="27" fill="none" stroke="#9D174D" stroke-width="2"/>
+        <path d="M156.6 110.6a5 5 0 0 0-6.6 0 5 5 0 0 0-6.6 0 4.9 4.9 0 0 0 0 7l1 1 5.6 5.4 5.6-5.4 1-1a4.9 4.9 0 0 0 0-7z"
+              fill="#FFE8F1"/>
+      </svg>
 
-        <p>
+      <p class="rotulo">um presente feito à mão</p>
+      <h1 class="abertura__titulo">Tem uma carta<br>esperando por você</h1>
+      <p class="abertura__linha">Achei que era melhor te contar tudo desde o começo. Coloca no som se quiser, e vem comigo.</p>
+
+      <button class="botao botao--principal" id="abrir-carta" type="button">
+        Abrir a carta
+      </button>
+    </div>
+  </div>
+
+  <!-- Ornamentos globais -->
+  <div class="progresso" aria-hidden="true"><div class="progresso__barra" id="barra-progresso"></div></div>
+  <canvas class="petalas" id="canvas-petalas" aria-hidden="true"></canvas>
+  <div class="grao" aria-hidden="true"></div>
+
+  <main>
+
+    <!-- ===================================================================
+         1. HERO
+         =================================================================== -->
+    <header class="hero">
+      <div class="hero__aurora" id="hero-aurora" aria-hidden="true"></div>
+
+      <div class="container hero__grade">
+        <div>
+          <span class="rotulo hero__eyebrow">Nossa história</span>
+
+          <h1 class="hero__nome">
+            <span class="script">para a minha</span>
+            <span id="hero-nome" data-nome="dela">Rayssa</span>
+          </h1>
+
+          <p class="hero__frase" id="hero-frase">
+            Tudo o que a gente viveu até aqui, em ordem — e tudo o que eu ainda quero viver com você.
+          </p>
+
+          <div class="hero__acoes">
+            <a class="botao botao--principal" href="#historia">Ver a nossa história</a>
+            <a class="botao botao--contorno" href="#carta">Ler a carta</a>
+          </div>
+        </div>
+
+        <div class="hero__foto">
+          <figure class="moldura">
+            <span class="moldura__fita" aria-hidden="true"></span>
+            <div class="moldura__midia" style="--proporcao: 16 / 11; --foco: 58% 38%;">
+              <img src="euerayssa.jpg" alt="Cauã e Rayssa abraçados" fetchpriority="high" decoding="async">
+            </div>
+            <figcaption class="moldura__legenda">eu e você</figcaption>
+          </figure>
+
+          <div class="hero__selo">
+            <svg class="texto-circular" viewBox="0 0 148 148" aria-hidden="true">
+              <defs>
+                <path id="circulo-selo" d="M74,74 m-52,0 a52,52 0 1,1 104,0 a52,52 0 1,1 -104,0" fill="none"/>
+              </defs>
+              <text><textPath href="#circulo-selo">cauã &amp; rayssa • pra sempre • cauã &amp; rayssa • </textPath></text>
+            </svg>
+            <svg class="coracao-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.4 5.9a5.2 5.2 0 0 0-7.4 0L12 7l-1-1.1a5.2 5.2 0 0 0-7.4 7.4l.9.9L12 21.4l7.5-7.2.9-.9a5.2 5.2 0 0 0 0-7.4z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__rolar" aria-hidden="true">
+        <span>role</span>
+        <i></i>
+      </div>
+    </header>
+
+    <!-- ===================================================================
+         2. A CARTA (o texto original, preservado)
+         =================================================================== -->
+    <section class="secao carta" id="carta">
+      <div class="container-estreito">
+        <div class="papel" data-revelar>
+          <h2 class="carta__titulo">
+            Para o amoreco da minha vida
+            <svg class="coracao-svg" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--rose-500); font-size: .78em;">
+              <path d="M20.4 5.9a5.2 5.2 0 0 0-7.4 0L12 7l-1-1.1a5.2 5.2 0 0 0-7.4 7.4l.9.9L12 21.4l7.5-7.2.9-.9a5.2 5.2 0 0 0 0-7.4z"/>
+            </svg>
+          </h2>
+
+          <p class="carta__texto">
+            Minha princesinha, a pessoinha que, desde que entrou na minha vida, tem deixado ela
+            muito mais divertida, alegre e amorosa. Você tem o meu sorriso favorito desse mundo!
+            Sempre vou te escolher, todos os dias.
+          </p>
+
+          <p class="carta__texto">
             Eu te amo mais do que palavras podem explicar.
-        </p>
+          </p>
 
-        <h2>Com amor, Cauã 💌</h2>
+          <p class="carta__assinatura">Com amor, <span data-nome="dele">Cauã</span></p>
+
+          <span class="selo" aria-hidden="true">C&amp;R</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         3. CONTADOR
+         =================================================================== -->
+    <section class="secao contador" id="contador">
+      <div class="container">
+        <div class="secao-cabecalho">
+          <span class="rotulo">Desde o primeiro sim</span>
+          <h2>A gente já está junto há</h2>
+        </div>
+
+        <div class="contador__grade">
+          <div class="contador__item">
+            <span class="contador__numero" data-unidade="dias">0</span>
+            <span class="contador__unidade">dias</span>
+          </div>
+          <div class="contador__item">
+            <span class="contador__numero" data-unidade="horas">00</span>
+            <span class="contador__unidade">horas</span>
+          </div>
+          <div class="contador__item">
+            <span class="contador__numero" data-unidade="minutos">00</span>
+            <span class="contador__unidade">minutos</span>
+          </div>
+          <div class="contador__item">
+            <span class="contador__numero" data-unidade="segundos">00</span>
+            <span class="contador__unidade">segundos</span>
+          </div>
+        </div>
+
+        <p class="contador__nota">…e contando. Que sejam muitos e muitos mais, se Deus quiser.</p>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4. FAIXA CURVA
+         =================================================================== -->
+    <div class="faixa" aria-hidden="true">
+      <svg class="laco-curvo" id="laco-curvo"></svg>
     </div>
 
-    
+    <!-- ===================================================================
+         5. LINHA DO TEMPO
+         =================================================================== -->
+    <section class="secao historia" id="historia">
+      <div class="container">
+        <div class="secao-cabecalho">
+          <span class="rotulo">Capítulo por capítulo</span>
+          <h2>A nossa história<br>em dez momentos</h2>
+          <p class="subtitulo">Cada foto aqui é uma primeira vez. E toda primeira vez com você virou uma coisa que eu quero repetir pra sempre.</p>
+        </div>
+      </div>
+
+      <div class="historia__trilho" id="trilho-historia" aria-hidden="true"><i></i></div>
+
+      <div class="container">
+        <div id="lista-capitulos"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         6. GALERIA
+         =================================================================== -->
+    <section class="secao galeria" id="galeria">
+      <div class="container">
+        <div class="secao-cabecalho">
+          <span class="rotulo">Todos os momentos</span>
+          <h2>O nosso mural</h2>
+          <p class="subtitulo">Clica em qualquer foto pra ver de pertinho.</p>
+        </div>
+
+        <div class="galeria__mosaico" id="mosaico-galeria"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         7. MOTIVOS
+         =================================================================== -->
+    <section class="secao motivos" id="motivos">
+      <div class="container">
+        <div class="secao-cabecalho">
+          <span class="rotulo">Se me perguntarem por quê</span>
+          <h2 data-dividir>O que eu amo em você</h2>
+        </div>
+
+        <div class="motivos__grade" id="grade-motivos"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         8. FÉ
+         =================================================================== -->
+    <section class="secao fe" id="fe">
+      <div class="fe__raios" aria-hidden="true"></div>
+      <div class="container-estreito">
+        <div class="secao-cabecalho" style="margin-bottom: var(--space-md)">
+          <span class="rotulo">O nosso alicerce</span>
+        </div>
+
+        <blockquote class="fe__citacao" id="versiculo-texto"></blockquote>
+        <p class="fe__fonte rotulo" id="versiculo-fonte"></p>
+
+        <p class="texto-corpo centro" style="margin: var(--space-lg) auto 0" data-revelar>
+          Eu oro por nós todos os dias. Que a presença de Deus esteja sempre no nosso
+          relacionamento e que a gente continue crescendo junto, servindo junto e escolhendo
+          um ao outro — com Ele no meio.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         9. PROMESSAS
+         =================================================================== -->
+    <section class="secao promessas" id="promessas">
+      <div class="container">
+        <div class="secao-cabecalho">
+          <span class="rotulo">De mim pra você</span>
+          <h2 data-dividir>As minhas promessas</h2>
+        </div>
+
+        <div class="promessas__pilha" id="pilha-promessas"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         10. FINAL + ASSINATURA
+         =================================================================== -->
+    <section class="secao final" id="final">
+      <div class="container-estreito">
+        <div class="secao-cabecalho">
+          <span class="rotulo">Pra terminar</span>
+        </div>
+
+        <p class="final__eu-te-amo" data-revelar="zoom">Eu te amo, amor</p>
+
+        <p class="final__texto" id="final-texto" style="margin-top: var(--space-md)">Tô fazendo isso pra te lembrar que eu quero ser pra sempre a sua pessoa. Que a cada dia a gente possa se amar mais, esperar um pelo outro, e que seja com você que eu vou viver o resto da minha vida.</p>
+
+        <div class="assinatura">
+          <svg class="assinatura__traco" id="traco-assinatura" viewBox="0 0 320 60" aria-hidden="true">
+            <path d="M8 42c22-30 33-33 39-19s-8 30-14 21 6-31 26-31 18 27 8 29-14-14 4-19 26 8 39 8 22-9 30-16 22-13 30-4 6 20 18 20 24-9 32-19"/>
+          </svg>
+
+          <div class="assinatura__par">
+            <div class="assinatura__bloco">
+              <span class="assinatura__papel">de</span>
+              <span class="assinatura__nome" data-nome="dele">Cauã</span>
+            </div>
+            <div class="assinatura__bloco">
+              <span class="assinatura__papel">para</span>
+              <span class="assinatura__nome" data-nome="apelido">Minha boneca</span>
+            </div>
+          </div>
+
+          <p class="divisor" aria-hidden="true">
+            <svg class="coracao-svg" viewBox="0 0 24 24" style="color: var(--rose-400)">
+              <path d="M20.4 5.9a5.2 5.2 0 0 0-7.4 0L12 7l-1-1.1a5.2 5.2 0 0 0-7.4 7.4l.9.9L12 21.4l7.5-7.2.9-.9a5.2 5.2 0 0 0 0-7.4z"/>
+            </svg>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>
+        feito com
+        <svg class="coracao-svg" viewBox="0 0 24 24" aria-label="amor">
+          <path d="M20.4 5.9a5.2 5.2 0 0 0-7.4 0L12 7l-1-1.1a5.2 5.2 0 0 0-7.4 7.4l.9.9L12 21.4l7.5-7.2.9-.9a5.2 5.2 0 0 0 0-7.4z"/>
+        </svg>
+        por <span data-nome="dele">Cauã</span>, só pra você
+      </p>
+    </div>
+  </footer>
+
+  <!-- Música opcional: basta salvar um arquivo em public/musica.mp3 -->
+  <button class="musica" id="botao-musica" type="button">
+    <span class="musica__ondas" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="musica__rotulo">Tocar música</span>
+  </button>
+  <audio id="audio-musica" src="public/musica.mp3" loop preload="metadata"></audio>
+
+  <script src="src/js/historia.js"></script>
+  <script src="src/js/aurora.js"></script>
+  <script src="src/js/efeitos.js"></script>
+  <script src="src/js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,495 @@
+/* =========================================================================
+   Componentes reutilizáveis
+   Efeitos inspirados no ReactBits, portados para HTML/CSS/JS puro.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. REVELAÇÃO NO SCROLL  (ScrollReveal / FadeContent / BlurText)
+   ------------------------------------------------------------------------- */
+[data-revelar] {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+  transition:
+    opacity   900ms var(--ease-soft) var(--atraso, 0ms),
+    transform 900ms var(--ease-soft) var(--atraso, 0ms),
+    filter    900ms var(--ease-soft) var(--atraso, 0ms);
+  will-change: opacity, transform;
+}
+[data-revelar='esquerda'] { transform: translateX(-42px); }
+[data-revelar='direita']  { transform: translateX(42px); }
+[data-revelar='zoom']     { transform: scale(.9); }
+
+/* No celular a entrada lateral estouraria a largura da tela, então ela sobe */
+@media (max-width: 899px) {
+  [data-revelar='esquerda'],
+  [data-revelar='direita'] { transform: translateY(28px); }
+}
+[data-revelar].visivel {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* Texto dividido em palavras (SplitText) */
+.dividir-palavras { display: inline; }
+.palavra {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em) rotate(2deg);
+  filter: blur(5px);
+  transition: opacity 720ms var(--ease-soft), transform 720ms var(--ease-back), filter 720ms ease;
+  transition-delay: var(--atraso, 0ms);
+}
+.visivel .palavra,
+.palavra.visivel {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* Texto dividido em letras (para títulos grandes) */
+.letra {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.62em) scale(.86);
+  filter: blur(8px);
+  transition: opacity 800ms var(--ease-soft), transform 900ms var(--ease-back), filter 800ms ease;
+  transition-delay: var(--atraso, 0ms);
+}
+.letra.visivel { opacity: 1; transform: none; filter: blur(0); }
+.letra--espaco { width: .32em; }
+
+/* -------------------------------------------------------------------------
+   2. BOTÕES
+   ------------------------------------------------------------------------- */
+.botao {
+  --brilho: 0%;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+  min-height: 52px;
+  padding: 0 2.1rem;
+  border-radius: 999px;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--dur-mid) var(--ease-back),
+              box-shadow var(--dur-mid) var(--ease-out);
+}
+
+.botao--principal {
+  background: linear-gradient(135deg, var(--rose-500), var(--rose-600) 55%, var(--rose-700));
+  color: #fff;
+  box-shadow: var(--shadow-glow);
+}
+.botao--principal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.42) 50%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform 900ms var(--ease-out);
+}
+.botao--principal:hover::after,
+.botao--principal:focus-visible::after { transform: translateX(120%); }
+
+.botao--contorno {
+  background: rgba(255, 255, 255, .6);
+  color: var(--rose-700);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-xs);
+}
+
+.botao:hover  { transform: translateY(-3px) scale(1.02); box-shadow: var(--shadow-lg); }
+.botao:active { transform: translateY(-1px) scale(.99); }
+
+/* -------------------------------------------------------------------------
+   3. CARTÃO DE PAPEL  (a carta)
+   ------------------------------------------------------------------------- */
+.papel {
+  position: relative;
+  background:
+    linear-gradient(180deg, var(--paper), var(--cream));
+  border: 1px solid rgba(219, 39, 119, .10);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: clamp(2rem, 1.2rem + 3.4vw, 4.5rem);
+}
+.papel::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(184, 138, 63, .22);
+  border-radius: calc(var(--radius-lg) - 10px);
+  pointer-events: none;
+}
+
+/* Selo de cera */
+.selo {
+  position: absolute;
+  left: 50%;
+  bottom: -34px;
+  translate: -50% 0;
+  width: 74px;
+  height: 74px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--rose-400), var(--rose-600) 46%, var(--rose-900));
+  box-shadow: 0 8px 22px rgba(131, 24, 67, .34), inset 0 -3px 8px rgba(0, 0, 0, .28), inset 0 3px 8px rgba(255, 255, 255, .28);
+  color: #FFE8F1;
+  font-family: var(--font-script);
+  font-size: 1.8rem;
+  line-height: 1;
+  padding-bottom: 6px;
+}
+
+/* -------------------------------------------------------------------------
+   4. MOLDURA DE FOTO  (TiltedCard + GlareHover)
+   ------------------------------------------------------------------------- */
+.moldura {
+  --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+  position: relative;
+  display: block;
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  padding: 14px 14px 62px;
+  box-shadow: var(--shadow-md);
+  transform-style: preserve-3d;
+  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transition: transform 520ms var(--ease-soft), box-shadow 520ms var(--ease-out);
+  will-change: transform;
+}
+.moldura.inclinando { transition: transform 90ms linear, box-shadow 300ms var(--ease-out); }
+.moldura:hover { box-shadow: var(--shadow-lg); }
+
+.moldura__midia {
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(var(--radius-md) - 8px);
+  background: var(--rose-100);
+  aspect-ratio: var(--proporcao, 4 / 5);
+}
+
+.moldura__midia img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--foco, center 40%);
+  transform: scale(1.02);
+  transition: transform 1100ms var(--ease-soft), filter 700ms ease;
+}
+.moldura:hover .moldura__midia img { transform: scale(1.07); }
+
+/* Brilho que atravessa (GlareHover) */
+.moldura__midia::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 36%, rgba(255,255,255,.55) 50%, transparent 64%);
+  transform: translateX(-130%);
+  transition: transform 1000ms var(--ease-out);
+  pointer-events: none;
+}
+.moldura:hover .moldura__midia::after { transform: translateX(130%); }
+
+/* Legenda manuscrita da polaroid */
+.moldura__legenda {
+  position: absolute;
+  left: 0; right: 0; bottom: 16px;
+  text-align: center;
+  font-family: var(--font-script);
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--rose-600);
+  pointer-events: none;
+}
+
+/* Fita adesiva */
+.moldura__fita {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  translate: -50% 0;
+  width: 118px;
+  height: 30px;
+  rotate: -2.6deg;
+  background: linear-gradient(180deg, rgba(251, 207, 224, .82), rgba(247, 168, 196, .68));
+  box-shadow: 0 2px 6px rgba(131, 24, 67, .14);
+  pointer-events: none;
+}
+.moldura__fita::before,
+.moldura__fita::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 7px;
+  background: repeating-linear-gradient(180deg, transparent 0 4px, rgba(255,255,255,.7) 4px 8px);
+}
+.moldura__fita::before { left: 0; }
+.moldura__fita::after  { right: 0; }
+
+/* Variantes de inclinação para o mosaico */
+.girar-esq  { rotate: -2.2deg; }
+.girar-dir  { rotate: 2.2deg; }
+
+/* -------------------------------------------------------------------------
+   5. CARTÃO COM HOLOFOTE  (SpotlightCard)
+   ------------------------------------------------------------------------- */
+.holofote {
+  --mx: 50%; --my: 50%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(253,236,242,.72));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-mid) var(--ease-out), box-shadow var(--dur-mid) var(--ease-out);
+}
+.holofote::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(320px circle at var(--mx) var(--my), rgba(219, 39, 119, .16), transparent 62%);
+  transition: opacity 380ms var(--ease-out);
+  pointer-events: none;
+}
+.holofote:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.holofote:hover::before { opacity: 1; }
+
+/* -------------------------------------------------------------------------
+   6. BORDA ESTRELADA  (StarBorder)
+   ------------------------------------------------------------------------- */
+.borda-viva {
+  position: relative;
+  isolation: isolate;
+}
+.borda-viva::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--angulo, 0deg),
+    transparent 0deg, var(--rose-300) 40deg, var(--gold-400) 80deg, transparent 130deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: girar-borda 6s linear infinite;
+}
+@property --angulo {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes girar-borda { to { --angulo: 360deg; } }
+
+/* -------------------------------------------------------------------------
+   7. TEXTO CIRCULAR  (CircularText)
+   ------------------------------------------------------------------------- */
+.texto-circular {
+  width: 148px;
+  height: 148px;
+  animation: girar 22s linear infinite;
+}
+.texto-circular text {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  letter-spacing: .30em;
+  text-transform: uppercase;
+  fill: var(--gold-600);
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* -------------------------------------------------------------------------
+   8. MARQUEE CURVO  (CurvedLoop)
+   ------------------------------------------------------------------------- */
+.laco-curvo {
+  width: 100%;
+  overflow: visible;
+  display: block;
+  user-select: none;
+  cursor: grab;
+}
+.laco-curvo:active { cursor: grabbing; }
+.laco-curvo text {
+  font-family: var(--font-display);
+  font-size: 74px;
+  font-weight: 500;
+  font-style: italic;
+  fill: var(--rose-300);
+}
+
+/* -------------------------------------------------------------------------
+   9. BARRA DE PROGRESSO DE LEITURA
+   ------------------------------------------------------------------------- */
+.progresso {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  z-index: 9995;
+  background: rgba(251, 207, 224, .35);
+}
+.progresso__barra {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--rose-300), var(--rose-500), var(--gold-400));
+  box-shadow: 0 0 12px rgba(219, 39, 119, .5);
+  transition: width 120ms linear;
+}
+
+/* -------------------------------------------------------------------------
+   10. CURSOR CORAÇÃO (apenas em telas com mouse)
+   ------------------------------------------------------------------------- */
+.cursor-brilho {
+  position: fixed;
+  top: 0; left: 0;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  z-index: 9994;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(238, 123, 166, .55), rgba(238, 123, 166, 0) 70%);
+  opacity: 0;
+  transition: opacity 400ms ease, scale 300ms var(--ease-back);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cursor-brilho { opacity: 1; }
+  .cursor-brilho.grande { scale: 2.4; }
+}
+
+/* Coração que sobe ao clicar (ClickSpark) */
+.faisca {
+  position: fixed;
+  z-index: 9993;
+  pointer-events: none;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--rose-400);
+  animation: faiscar 900ms var(--ease-out) forwards;
+}
+@keyframes faiscar {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(.35) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.15) rotate(var(--dr)); }
+}
+
+/* -------------------------------------------------------------------------
+   11. PÉTALAS FLUTUANTES (canvas de fundo)
+   ------------------------------------------------------------------------- */
+.petalas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------
+   12. LIGHTBOX DA GALERIA
+   ------------------------------------------------------------------------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(58, 34, 46, .82);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 380ms var(--ease-out), visibility 380ms;
+}
+.lightbox.aberto { opacity: 1; visibility: visible; }
+
+.lightbox__figura {
+  position: relative;
+  max-width: min(94vw, 1000px);
+  max-height: 86vh;
+  background: var(--paper);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, .45);
+  transform: scale(.9);
+  transition: transform 480ms var(--ease-back);
+}
+.lightbox.aberto .lightbox__figura { transform: scale(1); }
+
+.lightbox__figura img {
+  max-height: calc(86vh - 90px);
+  width: auto;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+}
+
+.lightbox__legenda {
+  padding: .8rem .4rem .3rem;
+  text-align: center;
+  font-family: var(--font-script);
+  font-size: 1.5rem;
+  color: var(--rose-600);
+}
+
+.lightbox__fechar,
+.lightbox__nav {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .92);
+  color: var(--rose-700);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--dur-mid) var(--ease-back), background var(--dur-fast);
+}
+.lightbox__fechar { top: -18px; right: -18px; }
+.lightbox__nav--ant  { left: -22px;  top: 50%; translate: 0 -50%; }
+.lightbox__nav--prox { right: -22px; top: 50%; translate: 0 -50%; }
+.lightbox__fechar:hover,
+.lightbox__nav:hover { transform: scale(1.12); background: #fff; }
+.lightbox__nav--ant:hover  { transform: translateY(-50%) scale(1.12); }
+.lightbox__nav--prox:hover { transform: translateY(-50%) scale(1.12); }
+
+@media (max-width: 620px) {
+  .lightbox__fechar { top: -14px; right: -6px; }
+  .lightbox__nav--ant  { left: -4px; }
+  .lightbox__nav--prox { right: -4px; }
+}
+
+/* -------------------------------------------------------------------------
+   13. ORNAMENTOS
+   ------------------------------------------------------------------------- */
+.divisor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--gold-400);
+}
+.divisor::before,
+.divisor::after {
+  content: '';
+  height: 1px;
+  width: min(140px, 22vw);
+  background: linear-gradient(90deg, transparent, var(--gold-300), transparent);
+}
+
+.coracao-svg {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: -0.11em;
+}
