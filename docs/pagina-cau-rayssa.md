@@ -73,3 +73,27 @@ Escopo: acompanha a construção e a evolução da página estática de presente
   - **A conta ativa do GitHub CLI continua sendo a pessoal (`caualorenzogm-sketch`).** Para voltar ao trabalho: `gh auth switch --user stgacessos`. Enquanto não trocar, operações de Git em projetos da STG usarão a conta pessoal.
   - O GitHub Pages não foi habilitado. O repositório é público e tem `index.html` na raiz, então bastaria ligar Pages na branch `main` para gerar um link — não foi feito por ser uma ação de publicação externa, que depende da decisão do usuário.
   - O Git avisou que converterá LF para CRLF nos arquivos de texto (padrão do Windows). Não afeta o funcionamento da página.
+
+## 2026-08-27T13:12-03:00 — Data real do namoro definida; contador correto no ar
+
+- Agente: Claude (Opus 5)
+- Estado: concluído
+
+- Alterações:
+  - `src/js/historia.js` — `DATA_DO_NAMORO` passou do valor provisório `2025-02-14T19:00:00` para `2025-03-02T00:00:00`, informado pelo usuário (2 de março de 2025).
+  - Commits `18a2f10` e anteriores publicados em `main`; o GitHub Pages reconstruiu e serve a versão nova.
+
+- Decisões:
+  - Hora fixada em `00:00:00` porque o usuário informou apenas o dia. Assim a contagem é em dias de calendário, que é como se conta aniversário de namoro. Se ele quiser a hora exata do pedido, basta trocar.
+  - Interpretação de `02/03/2025` como **2 de março** (formato brasileiro DD/MM/AAAA), coerente com o restante da conversa em português.
+
+- Verificações:
+  - Cálculo conferido fora do navegador: de 02/03/2025 a 27/08/2026 = **543 dias** (1 ano e 178 dias).
+  - `https://caualorenzogm-sketch.github.io/Cau-para-Rayssa/src/js/historia.js` — serve `2025-03-02` após a reconstrução do Pages (levou cerca de 45 s).
+  - Página publicada aberta no Chrome: contador exibindo `543 dias / 13 horas / 11 min / 58 s`, tiquetaqueando. Confirmado por captura de tela.
+  - Todos os 7 arquivos de código e as 11 fotos respondem HTTP 200 no domínio do Pages, inclusive os nomes com espaço (`FOTO%201.jpeg`).
+
+- Pendências e riscos:
+  - Pendência anterior da data provisória: **resolvida**.
+  - O repositório é público, então a página e as 11 fotos estão acessíveis a qualquer pessoa com o link, e o repositório é indexável. O usuário foi avisado; ainda não decidiu sobre `robots.txt` ou hospedagem com link privado.
+  - A conta ativa do GitHub CLI segue sendo a pessoal (`caualorenzogm-sketch`). Para voltar ao trabalho: `gh auth switch --user stgacessos`.
